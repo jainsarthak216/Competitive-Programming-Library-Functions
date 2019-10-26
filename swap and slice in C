@@ -1,0 +1,83 @@
+/* Function to swap nodes x and y in linked list by 
+   changing links */
+   
+void swapNodes(struct Node **head_ref, int x, int y) 
+{ 
+   // Nothing to do if x and y are same 
+   if (x == y) return; 
+  
+   // Search for x (keep track of prevX and CurrX 
+   struct Node *prevX = NULL, *currX = *head_ref; 
+   while (currX && currX->data != x) 
+   { 
+       prevX = currX; 
+       currX = currX->next; 
+   } 
+  
+   // Search for y (keep track of prevY and CurrY 
+   struct Node *prevY = NULL, *currY = *head_ref; 
+   while (currY && currY->data != y) 
+   { 
+       prevY = currY; 
+       currY = currY->next; 
+   } 
+  
+   // If either x or y is not present, nothing to do 
+   if (currX == NULL || currY == NULL) 
+       return; 
+  
+   // If x is not head of linked list 
+   if (prevX != NULL) 
+       prevX->next = currY; 
+   else // Else make y as new head 
+       *head_ref = currY;   
+  
+   // If y is not head of linked list 
+   if (prevY != NULL) 
+       prevY->next = currX; 
+   else  // Else make x as new head 
+       *head_ref = currX; 
+  
+   // Swap next pointers 
+   struct Node *temp = currY->next; 
+   currY->next = currX->next; 
+   currX->next  = temp; 
+} 
+
+
+/* Function to slice list in C*/
+
+typedef struct
+{
+  size_t size;
+  int val[];
+}Slice;
+ 
+Slice* make_slice( const int* array, size_t n, size_t m)
+{
+	size_t size = sizeof(Slice) + (m* sizeof(int));
+	Slice* newslice = (Slice*) malloc(size);
+ 
+    newslice->size = m;
+ 
+	int* start = array + (n-1); /* begin of slice */
+    int* end   = start + m;     /* one past the end */
+ 
+	int* tmp = start;
+ 
+    /* copy values */
+	while(tmp != end)
+     {
+        *(newslice->val+tmp) = *(array+tmp);
+        tmp++;
+     }
+ 
+	return newslice;
+}
+ 
+void slice_array( int* orig, size_t size,
+                   Slice* a, Slice* b, size_t split )
+{
+    a = make_slice( orig, 0 , split);
+    b = make_slice( orig, split, size); 
+}
